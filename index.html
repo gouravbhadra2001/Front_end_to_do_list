@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+</head>
+<body>
+
+
+    <div class="Container">
+
+        <ul class="list_container">
+            <textarea id="edit_name" style="display:none"></textarea>
+            <!--<li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+            <li>Item 4</li>-->
+        </ul>
+    </div>
+    <button class="floating-btn" onclick="add()">+</button>
+    <style>
+
+*{
+    align-items: center;
+    justify-content: center;
+   
+}
+
+:root {
+  background-image: linear-gradient(to right,  rgb(115, 6, 44), rgb(72, 9, 65));
+  overflow: hidden;
+}
+
+/* Hide scrollbar track */
+
+::-webkit-scrollbar {
+  width: 0.3rem; /* width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* color of the scrollbar track */
+  padding-right: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(to bottom, transparent, white, transparent); /* color of the scrollbar thumb */
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+  /*background: #555; /* color of the scrollbar thumb when hovered */
+}
+
+
+.Container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /*background-color: yellow;*/
+    height: 100vh;
+    width: inherit;
+}
+
+.list_container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5vh;
+}
+ul {
+    background-image: linear-gradient(to right, rgba(24, 35, 36, 0.290), rgba(66, 81, 51, 0.290));
+  display: flex;
+  border: 0.1rem solid wheat;
+  /*justify-content: center;
+  align-items: center;
+  flex-direction: column;*/
+  border-radius: 1.2rem;
+  padding: 5vh 3vh;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+  overflow: hidden;
+  overflow-y: scroll;
+  width: 45rem;
+}
+
+li {
+  display: flex;
+  list-style: none;
+  background-image: linear-gradient(to top right, rgb(217, 243, 50), rgb(170, 236, 54));
+  justify-content: space-between;
+  padding: 2vh;
+margin-bottom: 2vh; margin-top: 3vh;
+  margin-left: 5%;
+  border-radius: 1vw;
+  margin-right: 5%;
+  text-align: center;
+  
+}
+
+
+li .item_component{
+    margin-right: 2vw;
+    margin-left: 2vw;
+    display: flex;
+}
+
+
+#item_name div{
+    color: inherit;
+    display: flex;
+    font-family: cursive;
+    text-align: left;
+}
+
+.edit_container button{
+     /*background-image: linear-gradient(to bottom left, rgba(0, 0, 0, 0.816), rgba(135, 31, 232, 0.588));*/
+    cursor: pointer;
+    border: 0.3rem black;  
+    border-radius: 1vh;
+    margin-right: 1.6vw;
+    background-color: transparent;
+    font-size: 3.6vh;
+    font-family: cursive;
+}
+.floating-btn {
+    position: fixed;
+    bottom: 5vh; /* adjust as needed */
+    right: 6vw; /* adjust as needed */
+    background-image: linear-gradient(to right, rgb(62, 226, 155), rgb(140, 238, 223));
+    color: white;
+    padding: 1.6rem;
+    border: none;
+    border-radius: 50%;
+    height: 3vh;
+    width: 3vw;
+    cursor: pointer;
+    box-shadow: 0.2rem 0.2rem 0.3rem rgba(214, 187, 15, 0.481);
+    z-index: 30;
+    transition: transform 0.2s ease-in-out;
+    color: inherit;
+    font-size: 6.9vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.floating-btn:hover {
+    background-image: linear-gradient(to right, rgb(168, 241, 228), rgb(231, 238, 181));
+    transform: scaleX(1.3) scaleY(1.3) scaleZ(1.8);
+    
+}
+
+    @media (max-width: 50rem) {
+        ul{
+            padding: 1.2vh 0.9vh;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  width: 90vw;
+        }
+
+        li{
+            border-radius: 2rem;
+        }
+    }
+    
+    </style>
+
+    <script>
+        let count = 0;
+        
+
+        const listContainer = document.querySelector(".list_container");
+        listContainer.style.display = "none";
+
+        function add() {
+            const listItem = document.createElement("li");
+            listItem.setAttribute('id', `list_item_${count}`);
+            listItem.setAttribute('class', `list_tile`);
+
+            const innerTextDiv = document.createElement("div");
+            const innertext = document.createElement("div");
+            innerTextDiv.setAttribute('id', 'item_name');
+            innerTextDiv.setAttribute('class', 'item_component');
+            innertext.setAttribute('id', `innertxt_${count}`);
+            addItem(innertext);
+            innerTextDiv.appendChild(innertext);
+            listItem.appendChild(innerTextDiv);
+
+            const buttonContainer = document.createElement("div");
+            buttonContainer.setAttribute('class', `item_component edit_container`);
+
+            const button1 = document.createElement("button");
+            button1.setAttribute('title', 'Edit item name');
+            button1.innerText = "🖊️";
+            button1.onclick = () => {
+    const editTextarea = document.createElement("textarea");
+    editTextarea.setAttribute('class', `edit-textarea`);
+    editTextarea.setAttribute('id', `edit-textarea_${count}`);
+    editTextarea.value = innertext.innerText;
+    innerTextDiv.replaceChild(editTextarea, innertext);
+
+    editTextarea.focus();
+    editTextarea.addEventListener("keydown", (event) => {
+      if (event.keyCode === 13) {  // Enter key
+        innertext.innerText = editTextarea.value;
+        innerTextDiv.replaceChild(innertext, editTextarea);
+      }
+    });
+  };
+            
+            buttonContainer.appendChild(button1);
+
+            const button3 = document.createElement("button");
+            button3.setAttribute('title', 'Remove item');
+            button3.innerText = "📛";
+            buttonContainer.appendChild(button3);
+
+            listItem.appendChild(buttonContainer);
+
+
+            const time = document.createElement("p");
+            const now = new Date();
+            const currentTime = now.toLocaleTimeString();
+            const currentDate = now.toLocaleDateString();
+            time.innerText = `Last updated: \n${currentTime} on ${currentDate}`;
+
+            time.style.fontSize = "2.5vh";
+            time.style.fontFamily = "Pristina";
+            listItem.appendChild(time);
+            listContainer.appendChild(listItem);
+
+            // Add event listener to delete button
+            button3.addEventListener("click", function() {
+                listContainer.removeChild(listItem);
+            });
+
+            save();
+
+        }
+
+    
+
+
+function addItem(innertext){
+    var itemName = prompt("Enter the name of new list item", 'Medical Checkup');
+    innertext.innerText = itemName;
+}
+
+
+function save(){
+    count += 1;
+    alert(`The total number of the items ${count}`);
+    listContainer.style.display = "block";
+}
+
+
+    </script>
+</body>
+</html>
